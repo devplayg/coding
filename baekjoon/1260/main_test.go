@@ -62,23 +62,21 @@ func TestSearch(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			queue = make([]*node, 0)
-			idx = 0
-			m := createNodes(tt.args.nodeCount)
+			nm := newNodeMap(tt.args.nodeCount)
 			for _, line := range tt.args.lines {
-				m[line[0]].append(m[line[1]])
+				nm.m[line[0]].link(nm.m[line[1]])
 			}
 			startCaputringStdout()
-			visitByDFS(m[tt.args.startNo])
+			nm.dfs(tt.args.startNo)
 			res := stopCaptureStdout()
 			if strings.TrimSpace(res) != tt.args.want[0] {
 				t.Errorf("(DFS) got = %s, want = %s", res, tt.args.want[0])
 			}
 
-			m.clear()
+			nm.clear()
 
 			startCaputringStdout()
-			searchByBFS(m[tt.args.startNo])
+			nm.bfs(tt.args.startNo)
 			res = stopCaptureStdout()
 			if strings.TrimSpace(res) != tt.args.want[1] {
 				t.Errorf("(BFS) got = %s, want = %s", res, tt.args.want[1])
