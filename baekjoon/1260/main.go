@@ -34,9 +34,14 @@ type node struct {
 	visited  bool
 }
 
-func (t *node) link(a *node) {
-	t.children = append(t.children, a)
-	a.children = append(a.children, t)
+func (n *node) link(a *node) {
+	n.children = append(n.children, a)
+	a.children = append(a.children, n)
+}
+
+func (n *node) visit() {
+	fmt.Printf("%d ", n.id)
+	n.visited = true
 }
 
 // nodeMap
@@ -70,8 +75,7 @@ func (nm *nodeMap) dfs(id int) {
 	}
 
 	node := nm.m[id]
-	fmt.Printf("%d ", node.id)
-	node.visited = true
+	node.visit()
 
 	// Sort
 	sort.Slice(node.children, func(i, j int) bool {
@@ -96,8 +100,7 @@ func (nm *nodeMap) visitByBfs(id int) {
 	if node.visited {
 		return
 	}
-	fmt.Printf("%d ", node.id)
-	node.visited = true
+	node.visit()
 
 	for i := 0; i < len(node.children); i++ {
 		nm.queue = append(nm.queue, node.children[i])
