@@ -4,50 +4,66 @@ import (
 	"fmt"
 )
 
-var queue []*node
+const MAX = 1000 + 1
 
-// Using map
+var vertex, edge, start int
+var arr = [MAX][MAX]int{}
+var dfsQueue = make([]int, 0)
+var dfsVisited = [MAX]int{}
+var bfsVisited = [MAX]int{}
+
 func main() {
-	// Input
-	var nodeCount, lineCount, startId int
-	fmt.Scanf("%d %d %d", &nodeCount, &lineCount, &startId)
-
-	// Create nodes and draw lines
-	myNodeMap := newNodeMap(nodeCount)
-
-	var line1, line2 int
-	for i := 0; i < lineCount; i++ {
-		fmt.Scanf("%d %d", &line1, &line2)
-		myNodeMap.m[line1].link(myNodeMap.m[line2])
+	fmt.Scanln(&vertex, &edge, &start)
+	for i := 1; i <= edge; i++ {
+		var from, to int
+		fmt.Scanln(&from, &to)
+		arr[from][to] = 1
+		arr[to][from] = 1
 	}
 
-	dfs(myNodeMap.m[startId])
+	dfs(start)
+	fmt.Println("")
 
-	fmt.Println()
-	myNodeMap.clear()
-
-	myNodeMap.bfs(myNodeMap.m[startId])
+	bfs(start)
+	fmt.Println("")
 }
 
-// Using slice
-//func main() {
-//	// Input
-//	var nodeCount, lineCount, startId int
-//	fmt.Scanf("%d %d %d", &nodeCount, &lineCount, &startId)
-//
-//	// Create nodes and draw lines
-//	nl := newNodeList(nodeCount)
-//
-//	var line1, line2 int
-//	for i := 0; i < lineCount; i++ {
-//		fmt.Scanf("%d %d", &line1, &line2)
-//		nl.list[line1-1].link(nl.list[line2-1])
-//	}
-//
-//	dfs(nl.list[startId-1])
-//
-//	fmt.Println()
-//	nl.clear()
-//
-//	nl.bfs(nl.list[startId-1])
-//}
+func dfs(start int) {
+	dfsQueue = append(dfsQueue, start)
+	for len(dfsQueue) > 0 {
+		traverseDfs()
+	}
+}
+
+func traverseDfs() {
+	y := dfsQueue[0]
+	dfsVisited[y] = 1
+	fmt.Printf("%d ", y)
+	dfsQueue = dfsQueue[1:]
+
+	for x := 1; x <= vertex; x++ {
+		if arr[y][x] == 1 && dfsVisited[x] == 0 {
+			dfsQueue = append(dfsQueue, x)
+			traverseDfs()
+		}
+	}
+}
+
+func bfs(start int) {
+	queue := make([]int, 0)
+	queue = append(queue, start)
+	bfsVisited[start] = 1
+
+	for len(queue) > 0 {
+		y := queue[0]
+		fmt.Printf("%d ", y)
+		queue = queue[1:]
+
+		for x := 1; x <= vertex; x++ {
+			if arr[y][x] == 1 && bfsVisited[x] == 0 {
+				queue = append(queue, x)
+				bfsVisited[x] = 1
+			}
+		}
+	}
+}
