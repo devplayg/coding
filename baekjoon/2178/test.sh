@@ -44,11 +44,11 @@ EOF
 11111
 EOF
 
-#./main <<EOF
-#2 2
-#11
-#10
-#EOF
+./main <<EOF
+2 2
+11
+10
+EOF
 
 #./main <<EOF
 #100 100
