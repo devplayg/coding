@@ -11,21 +11,21 @@ const MAX = 25 + 1
 var arr [MAX][MAX]string
 var visited [MAX][MAX]bool
 var size int
+var dy = [4]int{-1, 0, 1, 0}
+var dx = [4]int{0, 1, 0, -1}
 
 type Pos struct {
-	y     int
-	x     int
-	gid   int
-	count int
+	y int
+	x int
 }
 
 func main() {
 	fmt.Scanln(&size)
-	for i := 1; i <= size; i++ {
+	for y := 1; y <= size; y++ {
 		var line string
 		fmt.Scanln(&line)
 		cols := strings.SplitN(line, "", size)
-		copy(arr[i][1:], cols[0:size])
+		copy(arr[y][1:], cols[0:size])
 	}
 	//spew.Dump(arr)
 
@@ -36,9 +36,8 @@ func main() {
 			if arr[y][x] == "1" && !visited[y][x] {
 				queue = make([]Pos, 0)
 				gid++
-				count := findGroup(Pos{y, x, gid, 1})
+				count := findGroup(Pos{y, x})
 				list = append(list, count)
-				//fmt.Printf("### gid=%d, count=%d\n", gid, count)
 			}
 		}
 	}
@@ -68,9 +67,6 @@ func valid(y, x int) bool {
 	return false
 }
 
-var dy = [4]int{-1, 0, 1, 0}
-var dx = [4]int{0, 1, 0, -1}
-
 func findGroup(pos Pos) int {
 	queue = append(queue, pos)
 	visited[pos.y][pos.x] = true
@@ -79,12 +75,11 @@ func findGroup(pos Pos) int {
 
 	for len(queue) > 0 {
 		p := queue[0]
-		p.count++
 		queue = queue[1:]
 		count++
 		for i := 0; i < 4; i++ {
 			if valid(p.y+dy[i], p.x+dx[i]) {
-				np := Pos{p.y + dy[i], p.x + dx[i], pos.gid, count}
+				np := Pos{p.y + dy[i], p.x + dx[i]}
 				queue = append(queue, np)
 				visited[np.y][np.x] = true
 				//fmt.Printf("[%d,%d] visited\n", np.y, np.x)
