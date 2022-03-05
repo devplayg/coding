@@ -4,65 +4,57 @@ import (
 	"fmt"
 )
 
-const MAX = 1000 + 1
-
-var vertex, edge, start int
-var arr = [MAX][MAX]int{}
-var dfsQueue = make([]int, 0)
-var dfsVisited = [MAX]int{}
-var bfsVisited = [MAX]int{}
+var V, E, S int
+var arr [][]int
+var visited []bool
 
 func main() {
-	fmt.Scanln(&vertex, &edge, &start)
-	for i := 1; i <= edge; i++ {
-		var from, to int
-		fmt.Scanln(&from, &to)
-		arr[from][to] = 1
-		arr[to][from] = 1
+	fmt.Scanln(&V, &E, &S)
+	arr = make([][]int, V+1)
+	for y := 1; y <= V; y++ {
+		arr[y] = make([]int, V+1)
 	}
 
-	dfs(start)
-	fmt.Println("")
-
-	bfs(start)
-	fmt.Println("")
-}
-
-func dfs(start int) {
-	dfsQueue = append(dfsQueue, start)
-	for len(dfsQueue) > 0 {
-		traverseDfs()
+	for y := 1; y <= E; y++ {
+		var a, b int
+		fmt.Scanln(&a, &b)
+		arr[a][b] = 1
+		arr[b][a] = 1
 	}
+
+	visited = make([]bool, V+1)
+	dfs(S)
+	fmt.Println()
+
+	visited = make([]bool, V+1)
+	bfs(S)
+	fmt.Println()
 }
 
-func traverseDfs() {
-	y := dfsQueue[0]
-	dfsVisited[y] = 1
-	fmt.Printf("%d ", y)
-	dfsQueue = dfsQueue[1:]
+func dfs(n int) {
+	visited[n] = true
+	fmt.Printf("%d ", n)
 
-	for x := 1; x <= vertex; x++ {
-		if arr[y][x] == 1 && dfsVisited[x] == 0 {
-			dfsQueue = append(dfsQueue, x)
-			traverseDfs()
+	for x := 1; x <= V; x++ {
+		if arr[n][x] == 1 && !visited[x] {
+			dfs(x)
 		}
 	}
+
 }
 
-func bfs(start int) {
-	queue := make([]int, 0)
-	queue = append(queue, start)
-	bfsVisited[start] = 1
+func bfs(n int) {
+	queue := []int{n}
+	visited[n] = true
 
 	for len(queue) > 0 {
 		y := queue[0]
-		fmt.Printf("%d ", y)
 		queue = queue[1:]
-
-		for x := 1; x <= vertex; x++ {
-			if arr[y][x] == 1 && bfsVisited[x] == 0 {
+		fmt.Printf("%d ", y)
+		for x := 1; x <= V; x++ {
+			if arr[y][x] == 1 && !visited[x] {
 				queue = append(queue, x)
-				bfsVisited[x] = 1
+				visited[x] = true
 			}
 		}
 	}
