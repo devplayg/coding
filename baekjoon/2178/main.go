@@ -36,12 +36,9 @@ func main() {
 	fmt.Scanf("%d %d", &N, &M)
 	for y := 1; y <= N; y++ {
 		for x := 1; x <= M; x++ {
-			if x == 1 {
-				fmt.Scanf("\n%1d", &arr[y][x])
-				continue
-			}
 			fmt.Scanf("%1d", &arr[y][x])
 		}
+		fmt.Scanf("%1s")
 	}
 
 	queue = append(queue, &Pos{1, 1, 1})

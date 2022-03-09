@@ -36,7 +36,8 @@ func dfs(n int) {
 		return
 	}
 	visited[n] = true
-	fmt.Printf("%d ", n)
+	fmt.Printf(
+		"%d ", n)
 
 	for x := 1; x <= V; x++ {
 		if arr[n][x] == 1 {

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 )
 
 var R, C int
@@ -11,15 +10,20 @@ var arr [][]int
 var dy = [4]int{-1, 0, 1, 0}
 var dx = [4]int{0, 1, 0, -1}
 var answer = 0
+var s string
+
+type newline struct{ tok string }
 
 func main() {
 	fmt.Scanln(&R, &C)
 	arr = make([][]int, R)
 	for y := 0; y < R; y++ {
-		var line string
-		fmt.Scanln(&line)
-		colArr := strings.SplitN(line, "", C)
-		arr[y] = toIntSlice(colArr)
+		arr[y] = make([]int, C)
+		for x := 0; x < C; x++ {
+			fmt.Scanf("%1s", &s)
+			arr[y][x] = int(s[0]) - int('A')
+		}
+		fmt.Scanf("%1s")
 	}
 	dfs(0, 0, 0)
 	fmt.Printf("%d\n", answer)
@@ -44,12 +48,4 @@ func dfs(y, x, c int) {
 		}
 	}
 	visited[arr[y][x]] = false
-}
-
-func toIntSlice(strList []string) []int {
-	intList := make([]int, len(strList))
-	for i, c := range strList {
-		intList[i] = int(c[0]) - int('A')
-	}
-	return intList
 }
